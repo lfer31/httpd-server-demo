@@ -1,26 +1,29 @@
-stage('build') {
-  node {
-    def app
+pipeline {
 
-    stage('Clone repository') {
-      checkout scm
+  options {
+    ansiColor('xterm')
+  }
+
+  agent {
+    kubernetes {
+      yamlFile 'builder.yaml'
     }
+  }
 
-    stage('Build image') {
-      app = docker.build("k3d-hub:5000/httpd-server")   
-    }
+  stages {
 
-    stage('Test image') {
-      app.inside {
-        sh 'echo "Tests passed"'
-      }
-    }
-
-    stage('Push image') {
-      docker.withRegistry('k3d-hub:5000', '') {
-        app.push("v${env.BUILD_NUMBER}")
+    stage('Kaniko Build & Push Image') {
+      steps {
+        container('kaniko') {
+          script {
+            sh '''
+            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+                             --context `pwd` \
+                             --destination=k3d-hub:5000/httpd-server:v${BUILD_NUMBER}
+            '''
+          }
+        }
       }
     }
   }
 }
-
