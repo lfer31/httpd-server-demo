@@ -20,7 +20,7 @@ pipeline {
             /kaniko/executor --dockerfile `pwd`/Dockerfile \
                              --context `pwd` \
                              --destination=k3d-hub:5000/httpd-server:v${BUILD_NUMBER} \
-                             -insecure --skip-tls-verify
+                             --insecure --skip-tls-verify
             '''
           }
         }
