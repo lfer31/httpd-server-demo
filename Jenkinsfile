@@ -32,7 +32,7 @@ pipeline {
         container('kubectl') {
           withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
             sh 'sed -i "s/<TAG>/v${BUILD_NUMBER}/" myweb.yaml'
-            sh 'kubectl apply -f myweb.yaml'
+            sh 'kubectl apply -f myweb.yaml --insecure-skip-tls-verify'
           }
         }
       }
