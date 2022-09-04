@@ -1,41 +1,36 @@
 pipeline {
-
-  options {
-    ansiColor('xterm')
-  }
-
-  agent {
-    kubernetes {
-      yamlFile 'builder.yaml'
+    environment {
+        appImage = ""
     }
-  }
+    agent any
 
-  stages {
-
-    stage('Kaniko Build & Push Image') {
-      steps {
-        container('kaniko') {
-          script {
-            sh '''
-            /kaniko/executor --dockerfile `pwd`/Dockerfile \
-                             --context `pwd` \
-                             --destination=k3d-hub:5000/httpd-server:v${BUILD_NUMBER} \
-                             --insecure --skip-tls-verify
-            '''
-          }
+    stages {
+        stage('checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/lfer31/httpd-server-demo.git'
+            }
+            
         }
-      }
-    }
-
-    stage('Deploy App to Kubernetes') {
-      steps {
-        container('kubectl') {
-          withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-            sh 'sed -i "s/<TAG>/v${BUILD_NUMBER}/" myweb.yaml'
-            sh 'kubectl apply -f myweb.yaml --insecure-skip-tls-verify'
-          }
+        stage('Build') {
+            steps {
+                // build
+                script {
+                    appImage = docker.build "registry31.duckdns.org/httpd-demo:v$BUILD_NUMBER"
+                    echo "registry31.duckdns.org/httpd-demo:v$BUILD_NUMBER"
+                }
+                
+            }
         }
-      }
+        stage('Push') {
+            steps {
+                script {
+                   docker.withRegistry("") {
+                       appImage.push()
+                   }
+                }
+            }
+        }
+
     }
-  }
 }
+
