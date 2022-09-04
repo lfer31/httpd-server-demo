@@ -5,12 +5,6 @@ pipeline {
     agent any
 
     stages {
-        stage('checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/lfer31/httpd-server-demo.git'
-            }
-            
-        }
         stage('Build') {
             steps {
                 // build
