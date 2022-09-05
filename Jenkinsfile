@@ -41,4 +41,12 @@ pipeline {
         }
 
     }
+    post {
+      success {
+        mail to: lfer31@gmail.com, subject: ‘The Pipeline httpd_demo_server success :)‘
+      }
+      failure {
+        mail to: lfer31@gmail.com, subject: ‘The Pipeline httpd_demo_server failed :(‘
+      }
+    }
 }
