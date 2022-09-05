@@ -43,10 +43,10 @@ pipeline {
     }
     post {
       success {
-        mail to: lfer31@gmail.com, subject: ‘The Pipeline httpd_demo_server success :)‘
+        mail bcc: '', body: '', cc: '', from: 'lmunoz@flora.com.gt', replyTo: '', subject: 'The Job Fail :(', to: 'lfer31@gmail.com'
       }
       failure {
-        mail to: lfer31@gmail.com, subject: ‘The Pipeline httpd_demo_server failed :(‘
+        mail bcc: '', body: '', cc: '', from: 'lmunoz@flora.com.gt', replyTo: '', subject: 'The Job Fail :(', to: 'lfer31@gmail.com'
       }
     }
 }
