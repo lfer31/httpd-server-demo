@@ -43,10 +43,10 @@ pipeline {
     }
     post {
       success {
-        mail bcc: '', body: '', cc: '', from: 'lmunoz@flora.com.gt', replyTo: '', subject: 'The Job Fail :(', to: 'lfer31@gmail.com'
+        mail bcc: '', body: 'success', cc: '', from: 'lmunoz@flora.com.gt', replyTo: '', subject: 'The Job Sucess :)', to: 'lfer31@gmail.com'
       }
       failure {
-        mail bcc: '', body: '', cc: '', from: 'lmunoz@flora.com.gt', replyTo: '', subject: 'The Job Fail :(', to: 'lfer31@gmail.com'
+        mail bcc: '', body: 'fail', cc: '', from: 'lmunoz@flora.com.gt', replyTo: '', subject: 'The Job Fail :(', to: 'lfer31@gmail.com'
       }
     }
 }
